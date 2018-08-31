@@ -38,5 +38,11 @@ var category = {
       date: date,
       note: note
     });
-  } // end addTransaction method
+    this.displayTransactions();
+  }, // end addTransaction method
+  
+  deleteTransaction: function (position) {
+    this.transactions.splice(position, 1);
+    this.displayTransactions();
+  }
 };
