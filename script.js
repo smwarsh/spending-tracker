@@ -1,15 +1,3 @@
-// var transaction = {
-//   info: 'Nissan gas @ $3.13',
-//   price: 32.72,
-//   date: 20180828,
-//   displayTransaction: function () {
-//     console.log(this);
-//   }
-// };
-
-
-// OR 
-
 var category = {
   transactions: [], // later, add objects to this array
   
@@ -44,5 +32,41 @@ var category = {
   deleteTransaction: function (position) {
     this.transactions.splice(position, 1);
     this.displayTransactions();
-  }
+  },
+  
+  editTransaction: function (position, info = '', price = '', date = '', note = '') {
+    
+    var itemToEdit;
+    
+    // error handling - make sure given valid position
+    if (position < this.transactions.length) {
+      itemToEdit = this.transactions[position];
+    } else {
+      console.log("Invalid position input");
+      return;
+    }
+    
+    // allows edits to any number of properties
+    if (info !== '') {
+      // update info
+      itemToEdit.info = info;
+    }
+    if (price !== '') {
+      itemToEdit.price = parseFloat(price);
+    }
+    if (date !== '') {
+      itemToEdit.date = parseInt(date);
+    }
+    if (note !== '') {
+      itemToEdit.note = note;
+    }
+    
+    this.displayTransactions();
+  } // end editTransaction method
 };
+
+
+
+
+
+
