@@ -7,6 +7,10 @@ function Transaction(info, price, date, note = '') {
   this.note = note;
 }
 
+function Category() {
+  
+}
+
 var category = {
   transactions: [], // later, add objects to this array
   
@@ -29,15 +33,7 @@ var category = {
   }, // end displayTransaction method
   
   addTransaction: function (info, price, date, note = '') {
-    this.transactions.push(
-    //   {
-    //   info: info,
-    //   price: price,
-    //   date: date,
-    //   note: note
-    // }
-      new Transaction(info, price, date, note)
-    );
+    this.transactions.push(new Transaction(info, price, date, note));
     this.displayTransactions();
   }, // end addTransaction method
   
@@ -84,12 +80,57 @@ var category = {
 
 var spendType = {
   incomeCategories: [],
-  expenseCategories: []
+  expenseCategories: [],
   
+  // spendType.expenseCategories[0].addTransaction('chocolate pizza', 7, 20180901, 'yum');
+  // okay so currently when I do the above line of code, it adds a transaction object to every item in the expenseCategories array
   
-  // populateIncomeCategories
-  // create category objects called salary, cashBack, gifts, other
-  // put them in this.incomeCategories
+  // hard code the categories for now
+  populateIncomeCategories: function () {
+    var salary = Object.create(category);
+    var cashBack = Object.create(category);
+    var gifts = Object.create(category);
+    var other = Object.create(category);
+    
+    this.incomeCategories.push(salary); // 0
+    this.incomeCategories.push(cashBack); // 1
+    this.incomeCategories.push(gifts); // 2
+    this.incomeCategories.push(other); // 3
+  },
+  
+  // this is definitely not the best way to do this...
+  populateExpenseCategories: function () {
+    var food = Object.create(category);
+    var transportation = Object.create(category);
+    var trips = Object.create(category);
+    var gifts = Object.create(category);
+    var health = Object.create(category);
+    var beauty = Object.create(category);
+    var recreationalActivities = Object.create(category);
+    var shopping = Object.create(category);
+    var sports = Object.create(category);
+    var pets = Object.create(category);
+    var education = Object.create(category);
+    var entertainment = Object.create(category);
+    var work = Object.create(category);
+    var other = Object.create(category);
+    
+    this.expenseCategories.push(food); // 0
+    this.expenseCategories.push(transportation); // 1
+    this.expenseCategories.push(trips); // 2
+    this.expenseCategories.push(gifts); // 3
+    this.expenseCategories.push(health); // 4
+    this.expenseCategories.push(beauty); // 5
+    this.expenseCategories.push(recreationalActivities); // 6
+    this.expenseCategories.push(shopping); // 7
+    this.expenseCategories.push(sports); // 8
+    this.expenseCategories.push(pets); // 9
+    this.expenseCategories.push(education); // 10
+    this.expenseCategories.push(entertainment); // 11
+    this.expenseCategories.push(work); // 12
+    this.expenseCategories.push(other); // 13
+  }
+
 };
 
 
