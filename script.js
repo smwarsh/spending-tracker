@@ -1,3 +1,12 @@
+"use strict";
+
+function Transaction(info, price, date, note = '') {
+  this.info = info;
+  this.price = price;
+  this.date = date;
+  this.note = note;
+}
+
 var category = {
   transactions: [], // later, add objects to this array
   
@@ -20,12 +29,15 @@ var category = {
   }, // end displayTransaction method
   
   addTransaction: function (info, price, date, note = '') {
-    this.transactions.push({
-      info: info,
-      price: price,
-      date: date,
-      note: note
-    });
+    this.transactions.push(
+    //   {
+    //   info: info,
+    //   price: price,
+    //   date: date,
+    //   note: note
+    // }
+      new Transaction(info, price, date, note)
+    );
     this.displayTransactions();
   }, // end addTransaction method
   
@@ -62,10 +74,23 @@ var category = {
     }
     
     this.displayTransactions();
-  } // end editTransaction method
+  }, // end editTransaction method
+  
+  clearNote: function (position) {
+    this.transactions[position].note = '';
+    this.displayTransactions();
+  }
 };
 
-
+var spendType = {
+  incomeCategories: [],
+  expenseCategories: []
+  
+  
+  // populateIncomeCategories
+  // create category objects called salary, cashBack, gifts, other
+  // put them in this.incomeCategories
+};
 
 
 
