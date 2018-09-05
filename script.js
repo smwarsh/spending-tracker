@@ -8,14 +8,13 @@ function Transaction(info, price, date, note = '') {
 }
 
 function Category() {
-  
+  // Should I put all the below methods in the category object into a constructor?
 }
 
 var category = {
   transactions: [], // later, add objects to this array
   
   displayTransactions: function () {
-    // print transaction information to the console
     if (this.transactions.length > 0) {
       console.log('My Transactions:');
       for (var i = 0; i < this.transactions.length; i++) {
@@ -27,15 +26,16 @@ var category = {
                     this.transactions[i].date,
                     this.transactions[i].note);
       } // end for loop
-    } else { // end if statement
+    } else {
       console.log('You don\'t have any transactions');
-    } // end else statement
-  }, // end displayTransaction method
+    }
+  },
   
   addTransaction: function (info, price, date, note = '') {
+    console.log(this);
     this.transactions.push(new Transaction(info, price, date, note));
     this.displayTransactions();
-  }, // end addTransaction method
+  },
   
   deleteTransaction: function (position) {
     this.transactions.splice(position, 1);
@@ -56,7 +56,6 @@ var category = {
     
     // allows edits to any number of properties
     if (info !== '') {
-      // update info
       itemToEdit.info = info;
     }
     if (price !== '') {
@@ -78,61 +77,35 @@ var category = {
   }
 };
 
-var spendType = {
-  incomeCategories: [],
-  expenseCategories: [],
-  
-  // spendType.expenseCategories[0].addTransaction('chocolate pizza', 7, 20180901, 'yum');
-  // okay so currently when I do the above line of code, it adds a transaction object to every item in the expenseCategories array
-  
-  // hard code the categories for now
-  populateIncomeCategories: function () {
-    var salary = Object.create(category);
-    var cashBack = Object.create(category);
-    var gifts = Object.create(category);
-    var other = Object.create(category);
-    
-    this.incomeCategories.push(salary); // 0
-    this.incomeCategories.push(cashBack); // 1
-    this.incomeCategories.push(gifts); // 2
-    this.incomeCategories.push(other); // 3
-  },
-  
-  // this is definitely not the best way to do this...
-  populateExpenseCategories: function () {
-    var food = Object.create(category);
-    var transportation = Object.create(category);
-    var trips = Object.create(category);
-    var gifts = Object.create(category);
-    var health = Object.create(category);
-    var beauty = Object.create(category);
-    var recreationalActivities = Object.create(category);
-    var shopping = Object.create(category);
-    var sports = Object.create(category);
-    var pets = Object.create(category);
-    var education = Object.create(category);
-    var entertainment = Object.create(category);
-    var work = Object.create(category);
-    var other = Object.create(category);
-    
-    this.expenseCategories.push(food); // 0
-    this.expenseCategories.push(transportation); // 1
-    this.expenseCategories.push(trips); // 2
-    this.expenseCategories.push(gifts); // 3
-    this.expenseCategories.push(health); // 4
-    this.expenseCategories.push(beauty); // 5
-    this.expenseCategories.push(recreationalActivities); // 6
-    this.expenseCategories.push(shopping); // 7
-    this.expenseCategories.push(sports); // 8
-    this.expenseCategories.push(pets); // 9
-    this.expenseCategories.push(education); // 10
-    this.expenseCategories.push(entertainment); // 11
-    this.expenseCategories.push(work); // 12
-    this.expenseCategories.push(other); // 13
-  }
+var income = {
+  salary: Object.create(category),
+  cashBack: Object.create(category),
+  gifts: Object.create(category),
+  other: Object.create(category)
+}
 
-};
+var expense = {
+  food: Object.create(category),
+  transportation: Object.create(category),
+  trips: Object.create(category),
+  gifts: Object.create(category),
+  health: Object.create(category),
+  beauty: Object.create(category),
+  recreationalActivities: Object.create(category),
+  shopping: Object.create(category),
+  sports: Object.create(category),
+  pets: Object.create(category),
+  education: Object.create(category),
+  entertainment: Object.create(category),
+  work: Object.create(category),
+  other: Object.create(category)
+}
 
 
-
-
+/*
+ * If I type in...
+ * expense.food.addTransaction('Max Brenner', 7, 20180901, 'chocolate pizza');
+ * Ugh! It adds the transaction to every instance of a category object in the expense AND income objects.
+ * The 'this' keyword must be referring back to all these objects at once.
+ * The one option I can see is to change the category object to a constructor. I'll try this tomorrow.
+ */
