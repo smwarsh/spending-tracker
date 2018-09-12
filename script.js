@@ -55,6 +55,20 @@ function sortCategoryByDate(category) {
   });
 }
 
+// returns a string
+function totalUpCategory(category) {
+  const totalPrice = category.transactions.reduce((total, transaction) => {
+    return total + transaction.price;
+  }, 0);
+  return roundToPrice(totalPrice);
+}
+
+// helper function to round number correctly to the second decimal place
+// source: http://www.jacklmoore.com/notes/rounding-in-javascript/
+function roundToPrice(value) {
+  return (Number(Math.round(value+'e'+2)+'e-'+2)).toFixed(2);
+}
+
 // hard code income and expense for now
 const income = {
   salary: { transactions: [] },
@@ -74,8 +88,12 @@ const expense = {
     {info: 'Ice cream with E', price: 5.00, date: 20180908},
     {info: 'Muffin', price: 2.67, date: 20180905},
     {info: 'Lunch with S', price: 13.96, date: 20180905}
-  ]},
-  transportation: { transactions: [] },
+  ] },
+  transportation: { transactions: [
+    {info: 'Gas @ $3.19', price: 36.61, date: 20180904},
+    {info: 'Gas @ $3.19', price: 20.94, date: 20180906},
+    {info: 'Gas @ $3.17', price: 28.45, date: 20180904}
+  ] },
   trips: { transactions: [] },
   gifts: { transactions: [] },
   health: { transactions: [] },
