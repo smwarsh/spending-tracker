@@ -43,6 +43,18 @@ function displayCategory(category) {
   }
 }
 
+function sortCategoryByDate(category) {
+  category.transactions.sort((a, b) => {
+    if(a.date > b.date) {
+      return 1; // sort b to an index lower than a
+    } else if(a.date < b.date) {
+      return -1; // sort a to an index lower than b
+    } else {
+      return 0; // leave a and b unchanged with respect to each other but sorted with respect to all different elements
+    }
+  });
+}
+
 // hard code income and expense for now
 const income = {
   salary: { transactions: [] },
@@ -52,7 +64,17 @@ const income = {
 }
 
 const expense = {
-  food: { transactions: [] },
+  food: { transactions: [
+    {info: 'Mocha coffee', price: 4.42, date: 20180905},
+    {info: 'Lunch with N', price: 16.86, date: 20180907},
+    {info: 'Bagels for me & M', price: 4.80, date: 20180901},
+    {info: 'Sushi with S', price: 12.00, date: 20180910},
+    {info: 'Salad bar with M', price: 8.52, date: 20180901},
+    {info: 'Chocolate pizza with M', price: 7.00, date: 20180901},
+    {info: 'Ice cream with E', price: 5.00, date: 20180908},
+    {info: 'Muffin', price: 2.67, date: 20180905},
+    {info: 'Lunch with S', price: 13.96, date: 20180905}
+  ]},
   transportation: { transactions: [] },
   trips: { transactions: [] },
   gifts: { transactions: [] },
