@@ -7,6 +7,10 @@
 
 "use strict";
 
+import * as dateFns from "./date_fns.js"; // having difficulty with this line
+
+console.log(dateFns.isToday(new Date()));
+
 let id = 36; // start at the end of the hard-coded transactions
 
 function addTransaction(category, data) { // takes 2 objects
