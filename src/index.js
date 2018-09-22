@@ -7,14 +7,12 @@
 
 "use strict";
 
-// import * as dateFns from "date-fns"; // having difficulty with this line
+import * as dateFns from "date-fns";
 
-// console.log(dateFns.isToday(new Date()));
+let id = 46; // start at the end of the hard-coded transactions
 
-let id = 36; // start at the end of the hard-coded transactions
-
+// takes 2 objects
 function addTransaction(category, data) {
-  // takes 2 objects
   return (category.transactions = [
     ...category.transactions,
     { ...data, id: ++id }
@@ -41,21 +39,37 @@ function editTransaction(category, id, updatesToTransaction) {
 }
 
 function displayCategory(category) {
-  if (category.transactions.length < 1) {
+  const transactions = sortCategoryByDate(category);
+  console.log(category.name + ":");
+  if (transactions.length < 1) {
     console.log("There are no transactions in this category");
   } else {
-    console.table(category.transactions);
+    transactions.map(item =>
+      console.log(
+        item.info + ":",
+        "$" + item.price,
+        dateFns.format(item.date, "M/D/YYYY")
+      )
+    );
   }
+  console.log();
 }
 
+// returns a sorted transactions array of the category
 function sortCategoryByDate(category) {
-  category.transactions.sort((a, b) => {
-    if (a.date > b.date) {
-      return 1; // sort b to an index lower than a
-    } else if (a.date < b.date) {
-      return -1; // sort a to an index lower than b
+  return category.transactions.sort((a, b) => {
+    // a and b have to be dates
+    if (dateFns.isDate(a.date) && dateFns.isDate(b.date)) {
+      if (dateFns.isAfter(a.date, b.date)) {
+        // if a is after b, returns true
+        return 1; // sort b to an index lower than a
+      } else if (dateFns.isBefore(a.date, b.date)) {
+        return -1; // sort a to an index lower than b
+      } else {
+        return 0; // leave a and b unchanged with respect to each other but sorted with respect to all different elements
+      }
     } else {
-      return 0; // leave a and b unchanged with respect to each other but sorted with respect to all different elements
+      console.log("These are not dates...");
     }
   });
 }
@@ -90,8 +104,6 @@ function displayAllByCategory() {
   // find a way to DRY this
   incomeCategories.map(category => displayCategory(category));
   expenseCategories.map(category => displayCategory(category));
-
-  // next: label each category and make it easier to read in the console
 }
 
 // calculate total gain in money
@@ -101,100 +113,385 @@ const totalGain = (income, expense) =>
 // hard code income and expense for now
 const income = {
   salary: {
-    transactions: [{ info: "Salary", price: 2011.74, date: 20180914, id: 36 }]
+    name: "Salary",
+    transactions: [
+      {
+        info: "Salary",
+        price: 2011.74,
+        date: new Date(2018, 8, 14),
+        id: 36
+      }
+    ]
   },
-  cashBack: { transactions: [] },
-  gifts: { transactions: [] },
-  other: { transactions: [] }
+  cashBack: {
+    name: "Cash Back",
+    transactions: []
+  },
+  gifts: {
+    name: "Gifts",
+    transactions: []
+  },
+  other: {
+    name: "Other",
+    transactions: []
+  }
 };
 
 const expense = {
   food: {
+    name: "Food",
     transactions: [
-      { info: "Mocha coffee", price: 4.42, date: 20180912, id: 1 },
-      { info: "Mocha coffee", price: 4.42, date: 20180905, id: 2 },
-      { info: "Lunch with NP", price: 16.86, date: 20180907, id: 3 },
-      { info: "Bagels for me & MW", price: 4.8, date: 20180901, id: 4 },
-      { info: "Sushi with SG", price: 12.0, date: 20180910, id: 5 },
-      { info: "Salad bar with MW", price: 8.52, date: 20180901, id: 6 },
-      { info: "Chocolate pizza with MW", price: 7.0, date: 20180901, id: 7 },
-      { info: "Ice cream with EF", price: 5.0, date: 20180908, id: 8 },
-      { info: "Muffin", price: 2.67, date: 20180905, id: 9 },
-      { info: "Lunch with SG", price: 13.96, date: 20180905, id: 10 },
-      { info: "Groceries", price: 29.1, date: 20180910, id: 11 }
-    ]
-  },
-  transportation: {
-    transactions: [
-      { info: "Metered parking", price: 1.5, date: 20180908, id: 12 },
-      { info: "Metered parking", price: 1.5, date: 20180905, id: 13 },
-      { info: "Gas @ $3.19", price: 36.61, date: 20180904, id: 14 },
-      { info: "Gas @ $3.17", price: 40.51, date: 20180913, id: 15 },
-      { info: "Card refill", price: 10.0, date: 20180901, id: 16 },
-      { info: "Gas @ $3.19", price: 20.94, date: 20180906, id: 17 },
-      { info: "Parking garage", price: 3.0, date: 20180912, id: 18 },
-      { info: "Gas @ $3.17", price: 28.46, date: 20180911, id: 19 },
-      { info: "Bus to the city", price: 8.0, date: 20180901, id: 20 },
-      { info: "Bus from the city", price: 8.0, date: 20180901, id: 21 },
       {
-        info: "Car vent mount for my phone",
-        price: 8.99,
-        date: 20180912,
-        id: 22
+        info: "Mocha coffee",
+        price: 4.42,
+        date: new Date(2018, 8, 12),
+        id: 1
+      },
+      {
+        info: "Mocha coffee",
+        price: 4.42,
+        date: new Date(2018, 8, 5),
+        id: 2
+      },
+      {
+        info: "Lunch with NP",
+        price: 16.86,
+        date: new Date(2018, 8, 7),
+        id: 3
+      },
+      {
+        info: "Bagels for me & MW",
+        price: 4.8,
+        date: new Date(2018, 8, 1),
+        id: 4
+      },
+      {
+        info: "Sushi with SG",
+        price: 12.0,
+        date: new Date(2018, 8, 10),
+        id: 5
+      },
+      {
+        info: "Salad bar with MW",
+        price: 8.52,
+        date: new Date(2018, 8, 1),
+        id: 6
+      },
+      {
+        info: "Chocolate pizza with MW",
+        price: 7.0,
+        date: new Date(2018, 8, 1),
+        id: 7
+      },
+      {
+        info: "Ice cream with EF",
+        price: 5.0,
+        date: new Date(2018, 8, 8),
+        id: 8
+      },
+      {
+        info: "Muffin",
+        price: 2.67,
+        date: new Date(2018, 8, 5),
+        id: 9
+      },
+      {
+        info: "Lunch with SG",
+        price: 13.96,
+        date: new Date(2018, 8, 5),
+        id: 10
+      },
+      {
+        info: "Groceries",
+        price: 29.1,
+        date: new Date(2018, 8, 10),
+        id: 11
+      },
+      {
+        info: "Mint Oreo Blizzard with EF & RI",
+        price: 4.35,
+        date: new Date(2018, 7, 5),
+        id: 46
+      },
+      {
+        info: "Panera Bread with CV",
+        price: 7.21,
+        date: new Date(2018, 7, 9),
+        id: 37
+      },
+      {
+        info: "Bagels for me, ZT, CW",
+        price: 5.32,
+        date: new Date(2018, 7, 25),
+        id: 38
+      },
+      {
+        info: "Pizza with NP",
+        price: 4,
+        date: new Date(2018, 7, 29),
+        id: 39
+      },
+      {
+        info: "Japanese groceries",
+        price: 52.45,
+        date: new Date(2018, 7, 26),
+        id: 40
       }
     ]
   },
-  trips: { transactions: [] },
-  gifts: {
+  transportation: {
+    name: "Transportation",
     transactions: [
-      { info: "Birthday present for EF", price: 17.95, date: 20180907, id: 23 },
-      { info: "Birthday present for MB", price: 14.05, date: 20180912, id: 24 }
+      {
+        info: "Metered parking",
+        price: 1.5,
+        date: new Date(2018, 8, 8),
+        id: 12
+      },
+      {
+        info: "Metered parking",
+        price: 1.5,
+        date: new Date(2018, 8, 5),
+        id: 13
+      },
+      {
+        info: "Gas @ $3.19",
+        price: 36.61,
+        date: new Date(2018, 8, 4),
+        id: 14
+      },
+      {
+        info: "Gas @ $3.17",
+        price: 40.51,
+        date: new Date(2018, 8, 13),
+        id: 15
+      },
+      {
+        info: "Card refill",
+        price: 10.0,
+        date: new Date(2018, 8, 1),
+        id: 16
+      },
+      {
+        info: "Gas @ $3.19",
+        price: 20.94,
+        date: new Date(2018, 8, 6),
+        id: 17
+      },
+      {
+        info: "Parking garage",
+        price: 3.0,
+        date: new Date(2018, 8, 12),
+        id: 18
+      },
+      {
+        info: "Gas @ $3.17",
+        price: 28.46,
+        date: new Date(2018, 8, 11),
+        id: 19
+      },
+      {
+        info: "Bus to the city",
+        price: 8.0,
+        date: new Date(2018, 8, 1),
+        id: 20
+      },
+      {
+        info: "Bus from the city",
+        price: 8.0,
+        date: new Date(2018, 8, 1),
+        id: 21
+      },
+      {
+        info: "Car vent mount for my phone",
+        price: 8.99,
+        date: new Date(2018, 8, 12),
+        id: 22
+      },
+      {
+        info: "Gas @ $3.13",
+        price: 32.72,
+        date: new Date(2018, 7, 28),
+        id: 41
+      },
+      {
+        info: "Gas @ $2.81 for motorcycle",
+        price: 7.3,
+        date: new Date(2018, 7, 16),
+        id: 42
+      }
+    ]
+  },
+  trips: {
+    name: "Trips",
+    transactions: []
+  },
+  gifts: {
+    name: "Gifts",
+    transactions: [
+      {
+        info: "Birthday present for EF",
+        price: 17.95,
+        date: new Date(2018, 8, 7),
+        id: 23
+      },
+      {
+        info: "Birthday present for MB",
+        price: 14.05,
+        date: new Date(2018, 8, 12),
+        id: 24
+      }
     ]
   },
   health: {
+    name: "Health",
     transactions: [
-      { info: "Boot", price: 15.0, date: 20180904, id: 25 },
-      { info: "Therapy", price: 165.0, date: 20180905, id: 26 },
-      { info: "Therapy", price: 165.0, date: 20180912, id: 27 },
-      { info: "Medicine", price: 4.58, date: 20180908, id: 28 }
+      {
+        info: "Boot",
+        price: 15.0,
+        date: new Date(2018, 8, 4),
+        id: 25
+      },
+      {
+        info: "Therapy",
+        price: 165.0,
+        date: new Date(2018, 8, 5),
+        id: 26
+      },
+      {
+        info: "Therapy",
+        price: 165.0,
+        date: new Date(2018, 8, 12),
+        id: 27
+      },
+      {
+        info: "Medicine",
+        price: 4.58,
+        date: new Date(2018, 8, 8),
+        id: 28
+      },
+      {
+        info: "Therapy",
+        price: 49.5,
+        date: new Date(2018, 7, 8),
+        id: 43
+      }
     ]
   },
-  beauty: { transactions: [] },
+  beauty: {
+    name: "Beauty",
+    transactions: []
+  },
   recreationalActivities: {
+    name: "Recreational Activities",
     transactions: [
-      { info: "Tickets to a play", price: 211.25, date: 20180907, id: 29 }
+      {
+        info: "Tickets to a play",
+        price: 211.25,
+        date: new Date(2018, 8, 7),
+        id: 29
+      },
+      {
+        info: "Movie with CV",
+        price: 13,
+        date: new Date(2018, 7, 9),
+        id: 44
+      }
     ]
   },
   shopping: {
+    name: "Shopping",
     transactions: [
-      { info: "Shirt from Express", price: 35.94, date: 20180901, id: 30 },
-      { info: "Shirt from Anthropologie", price: 29.97, date: 20180901, id: 31 }
+      {
+        info: "Shirt from Express",
+        price: 35.94,
+        date: new Date(2018, 8, 1),
+        id: 30
+      },
+      {
+        info: "Shirt from Anthropologie",
+        price: 29.97,
+        date: new Date(2018, 8, 1),
+        id: 31
+      }
     ]
   },
   sports: {
+    name: "Sports",
     transactions: [
-      { info: "Gym membership", price: 41.5, date: 20180904, id: 32 }
+      {
+        info: "Gym membership",
+        price: 41.5,
+        date: new Date(2018, 8, 4),
+        id: 32
+      }
     ]
   },
-  pets: { transactions: [] },
-  education: {
+  pets: {
+    name: "Pets",
     transactions: [
-      { info: "Group E loans", price: 375.0, date: 20180904, id: 33 },
-      { info: "Group E & Group A loans", price: 458.33, date: 20180910, id: 34 }
+      {
+        info: "Vet",
+        price: 78.5,
+        date: new Date(2018, 7, 6),
+        id: 45
+      }
+    ]
+  },
+  education: {
+    name: "Education",
+    transactions: [
+      {
+        info: "Group E loans",
+        price: 375.0,
+        date: new Date(2018, 8, 4),
+        id: 33
+      },
+      {
+        info: "Group E & Group A loans",
+        price: 458.33,
+        date: new Date(2018, 8, 10),
+        id: 34
+      }
     ]
   },
   entertainment: {
+    name: "Entertainment",
     transactions: [
       {
         info: "Music streaming subscription",
         price: 5.32,
-        date: 20180908,
+        date: new Date(2018, 8, 8),
         id: 35
       }
     ]
   },
-  work: { transactions: [] },
-  other: { transactions: [] }
+  work: {
+    name: "Work",
+    transactions: []
+  },
+  other: {
+    name: "Other",
+    transactions: []
+  }
 };
 
 displayAllByCategory();
+
+// var mochaCoffee1 = findTransaction(expense.food.transactions, 1);
+// console.log("Mocha coffee 1:", dateFns.format(mochaCoffee1.date, "M/D/YYYY"));
+
+// var mochaCoffee2 = findTransaction(expense.food.transactions, 2);
+// console.log("Mocha coffee 2:", dateFns.format(mochaCoffee2.date, "M/D/YYYY"));
+
+// sortCategoryByDate(expense.food);
+
+// displayCategory(expense.entertainment);
+
+// var sorted = sortCategoryByDate(expense.food);
+// console.log(sorted);
+
+/*  Notes:
+ *  I need to fix the price so it comes out always to the second decimal place, even with trailing zeros
+ *
+ */

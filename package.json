@@ -1,7 +1,7 @@
 {
-  "name": "parcel-sandbox",
+  "name": "thrift",
   "version": "1.0.0",
-  "description": "Simple Parcel Sandbox",
+  "description": "",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
@@ -12,5 +12,6 @@
   },
   "devDependencies": {
     "parcel-bundler": "^1.6.1"
-  }
+  },
+  "keywords": []
 }
