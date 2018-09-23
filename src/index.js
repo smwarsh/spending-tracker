@@ -9,7 +9,7 @@
 
 import * as dateFns from "date-fns";
 
-let id = 46; // start at the end of the hard-coded transactions
+let id = 49; // start at the end of the hard-coded transactions
 
 // takes 2 objects
 function addTransaction(category, data) {
@@ -60,8 +60,8 @@ function sortCategoryByDate(category) {
   return category.transactions.sort((a, b) => {
     // a and b have to be dates
     if (dateFns.isDate(a.date) && dateFns.isDate(b.date)) {
+      // if a is after b, returns true
       if (dateFns.isAfter(a.date, b.date)) {
-        // if a is after b, returns true
         return 1; // sort b to an index lower than a
       } else if (dateFns.isBefore(a.date, b.date)) {
         return -1; // sort a to an index lower than b
@@ -102,7 +102,9 @@ function displayAllByCategory() {
   const expenseCategories = Object.values(expense);
 
   // find a way to DRY this
+  console.log("INCOME");
   incomeCategories.map(category => displayCategory(category));
+  console.log("\nEXPENSE");
   expenseCategories.map(category => displayCategory(category));
 }
 
@@ -477,6 +479,29 @@ const expense = {
 };
 
 displayAllByCategory();
+
+addTransaction(expense.food, {
+  info: "Açaí bowls with CE & CV",
+  price: 9.62,
+  date: new Date(2018, 6, 29), // July 29
+  id: 47
+});
+
+addTransaction(expense.food, {
+  info: "GN's birthday dinner",
+  price: 21.99,
+  date: new Date(2018, 6, 28), // July 29
+  id: 48
+});
+
+addTransaction(expense.food, {
+  info: "Lemonade",
+  price: 2.72,
+  date: new Date(2018, 6, 9), // July 29
+  id: 49
+});
+
+displayCategory(expense.food);
 
 // var mochaCoffee1 = findTransaction(expense.food.transactions, 1);
 // console.log("Mocha coffee 1:", dateFns.format(mochaCoffee1.date, "M/D/YYYY"));
