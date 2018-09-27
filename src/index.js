@@ -55,6 +55,44 @@ function displayCategory(category) {
   console.log();
 }
 
+function isolateGroupByRange(group, startDate, endDate) {
+  // const incomeWithinRange = createIncomeCategory();
+  // const expenseWithinRange = createExpenseCategory();
+
+  const groupCategories = Object.values(group);
+  // const expenseCategories = Object.values(expense);
+
+  const groupWithinRange = groupCategories.map(category =>
+    category.transactions.filter(
+      transaction =>
+        // keep everything that isWithinRange
+        dateFns.isWithinRange(transaction.date, startDate, endDate)
+
+      // this feels wrong... i feel like i'm doing this wrong
+      // is it better to stop now and make a better, clearer plan, or to keep going and fix it when i'm done?
+      // i think the former
+    )
+  );
+
+  return groupWithinRange;
+  // find out if each transaction of each object isWithinRange
+  // so i need to take each category and
+  // access the transactions array, and filter THAT
+  // so actually i think i should use map on incomeCategories and expenseCategories
+  // and filter within that
+  // maybe using a helper function to do so, to keep the code clean
+
+  // i need to make sure this is only a copy, for display purposes
+  // or actually, i should probably make a function that simply isolates everything
+  // that way, i can use it for display and for math
+  // should return income and expense....... ugh why is this separation so difficult
+
+  // go through each category in income and expense
+  // go through the transactions array for each category object and filter them to match the date range
+  // put the new copy of the array in a new object with new categories
+  // at the end, display this newly generated object to the console
+}
+
 // returns a sorted transactions array of the category
 function sortCategoryByDate(category) {
   return category.transactions.sort((a, b) => {
@@ -106,6 +144,90 @@ function displayAllByCategory() {
   incomeCategories.map(category => displayCategory(category));
   console.log("\nEXPENSE");
   expenseCategories.map(category => displayCategory(category));
+}
+
+function createIncomeCategory() {
+  const emptyIncomeCategory = {
+    salary: {
+      name: "Salary",
+      transactions: []
+    },
+    cashBack: {
+      name: "Cash Back",
+      transactions: []
+    },
+    gifts: {
+      name: "Gifts",
+      transactions: []
+    },
+    other: {
+      name: "Other",
+      transactions: []
+    }
+  };
+  return emptyIncomeCategory;
+}
+
+function createExpenseCategory() {
+  const emptyExpenseCategory = {
+    food: {
+      name: "Food",
+      transactions: []
+    },
+    transportation: {
+      name: "Transportation",
+      transactions: []
+    },
+    trips: {
+      name: "Trips",
+      transactions: []
+    },
+    gifts: {
+      name: "Gifts",
+      transactions: []
+    },
+    health: {
+      name: "Health",
+      transactions: []
+    },
+    beauty: {
+      name: "Beauty",
+      transactions: []
+    },
+    recreationalActivities: {
+      name: "Recreational Activities",
+      transactions: []
+    },
+    shopping: {
+      name: "Shopping",
+      transactions: []
+    },
+    sports: {
+      name: "Sports",
+      transactions: []
+    },
+    pets: {
+      name: "Pets",
+      transactions: []
+    },
+    education: {
+      name: "Education",
+      transactions: []
+    },
+    entertainment: {
+      name: "Entertainment",
+      transactions: []
+    },
+    work: {
+      name: "Work",
+      transactions: []
+    },
+    other: {
+      name: "Other",
+      transactions: []
+    }
+  };
+  return emptyExpenseCategory;
 }
 
 // calculate total gain in money
@@ -478,7 +600,7 @@ const expense = {
   }
 };
 
-displayAllByCategory();
+// displayAllByCategory();
 
 addTransaction(expense.food, {
   info: "Açaí bowls with CE & CV",
@@ -490,18 +612,18 @@ addTransaction(expense.food, {
 addTransaction(expense.food, {
   info: "GN's birthday dinner",
   price: 21.99,
-  date: new Date(2018, 6, 28), // July 29
+  date: new Date(2018, 6, 28), // July 28
   id: 48
 });
 
 addTransaction(expense.food, {
   info: "Lemonade",
   price: 2.72,
-  date: new Date(2018, 6, 9), // July 29
+  date: new Date(2018, 6, 9), // July 9
   id: 49
 });
 
-displayCategory(expense.food);
+// displayCategory(expense.food);
 
 // var mochaCoffee1 = findTransaction(expense.food.transactions, 1);
 // console.log("Mocha coffee 1:", dateFns.format(mochaCoffee1.date, "M/D/YYYY"));
@@ -515,6 +637,14 @@ displayCategory(expense.food);
 
 // var sorted = sortCategoryByDate(expense.food);
 // console.log(sorted);
+
+console.log(
+  isolateGroupByRange(
+    expense,
+    dateFns.startOfMonth(new Date()),
+    dateFns.endOfMonth(new Date())
+  )
+);
 
 /*  Notes:
  *  I need to fix the price so it comes out always to the second decimal place, even with trailing zeros
