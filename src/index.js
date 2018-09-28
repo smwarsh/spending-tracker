@@ -38,6 +38,7 @@ function editTransaction(category, id, updatesToTransaction) {
   category.transactions[transactionIndex] = updatedTransaction;
 }
 
+// delete this soon; i have rewritten it below
 function displayCategory(category) {
   const transactions = sortCategoryByDate(category);
   console.log(category.name + ":");
@@ -55,43 +56,57 @@ function displayCategory(category) {
   console.log();
 }
 
-function isolateGroupByRange(group, startDate, endDate) {
-  // const incomeWithinRange = createIncomeCategory();
-  // const expenseWithinRange = createExpenseCategory();
+// takes the transactions array of a category
+function displayTransactions(transactions) {
+  if (transactions.length < 1) {
+    console.log("There are no transactions in this category");
+  } else {
+    transactions.map(item =>
+      console.log(
+        item.info + ":",
+        "$" + item.price,
+        dateFns.format(item.date, "M/D/YYYY")
+      )
+    );
+  }
+  console.log();
+}
 
+function newDisplayCategory(group, startDate, endDate) {
+  // still need to sort category by date
+
+  // need this to print the name of the category
   const groupCategories = Object.values(group);
-  // const expenseCategories = Object.values(expense);
+  groupCategories.map(function(category) {
+    console.log(`${category.name}:`);
+    const filteredTransactions = category.transactions.filter(transaction =>
+      // keep everything that isWithinRange
+      dateFns.isWithinRange(transaction.date, startDate, endDate)
+    );
+    displayTransactions(filteredTransactions);
+  });
+}
+
+function isolateGroupByRange(group, startDate, endDate) {
+  const groupCategories = Object.values(group);
 
   const groupWithinRange = groupCategories.map(category =>
-    category.transactions.filter(
-      transaction =>
-        // keep everything that isWithinRange
-        dateFns.isWithinRange(transaction.date, startDate, endDate)
-
-      // this feels wrong... i feel like i'm doing this wrong
-      // is it better to stop now and make a better, clearer plan, or to keep going and fix it when i'm done?
-      // i think the former
+    category.transactions.filter(transaction =>
+      // keep everything that isWithinRange
+      dateFns.isWithinRange(transaction.date, startDate, endDate)
     )
   );
 
+  // returns an array of Arrays (the categories are not objects anymore)
   return groupWithinRange;
-  // find out if each transaction of each object isWithinRange
-  // so i need to take each category and
-  // access the transactions array, and filter THAT
-  // so actually i think i should use map on incomeCategories and expenseCategories
-  // and filter within that
-  // maybe using a helper function to do so, to keep the code clean
 
   // i need to make sure this is only a copy, for display purposes
-  // or actually, i should probably make a function that simply isolates everything
-  // that way, i can use it for display and for math
-  // should return income and expense....... ugh why is this separation so difficult
-
-  // go through each category in income and expense
-  // go through the transactions array for each category object and filter them to match the date range
-  // put the new copy of the array in a new object with new categories
-  // at the end, display this newly generated object to the console
 }
+
+// what if we have sortCategoryByDate take an array instead of an object
+// would require nested array iteration methods again
+// map outside, to map through the categories and access transactions
+// sort inside, to sort the transactions
 
 // returns a sorted transactions array of the category
 function sortCategoryByDate(category) {
@@ -639,7 +654,7 @@ addTransaction(expense.food, {
 // console.log(sorted);
 
 console.log(
-  isolateGroupByRange(
+  newDisplayCategory(
     expense,
     dateFns.startOfMonth(new Date()),
     dateFns.endOfMonth(new Date())
