@@ -38,33 +38,15 @@ function editTransaction(category, id, updatesToTransaction) {
   category.transactions[transactionIndex] = updatedTransaction;
 }
 
-// delete this soon; i have rewritten it below
-function displayCategory(category) {
-  const transactions = sortCategoryByDate(category);
-  console.log(category.name + ":");
-  if (transactions.length < 1) {
-    console.log("There are no transactions in this category");
-  } else {
-    transactions.map(item =>
-      console.log(
-        item.info + ":",
-        "$" + item.price,
-        dateFns.format(item.date, "M/D/YYYY")
-      )
-    );
-  }
-  console.log();
-}
-
 // takes the transactions array of a category
 function displayTransactions(transactions) {
   if (transactions.length < 1) {
     console.log("There are no transactions in this category");
   } else {
-    transactions.map(item =>
+    sortTransactionsByDate(transactions).map(item =>
       console.log(
         item.info + ":",
-        "$" + item.price,
+        "$" + roundToPrice(item.price),
         dateFns.format(item.date, "M/D/YYYY")
       )
     );
@@ -72,10 +54,7 @@ function displayTransactions(transactions) {
   console.log();
 }
 
-function newDisplayCategory(group, startDate, endDate) {
-  // still need to sort category by date
-
-  // need this to print the name of the category
+function displayGroup(group, startDate, endDate) {
   const groupCategories = Object.values(group);
   groupCategories.map(function(category) {
     console.log(`${category.name}:`);
@@ -99,18 +78,11 @@ function isolateGroupByRange(group, startDate, endDate) {
 
   // returns an array of Arrays (the categories are not objects anymore)
   return groupWithinRange;
-
-  // i need to make sure this is only a copy, for display purposes
 }
 
-// what if we have sortCategoryByDate take an array instead of an object
-// would require nested array iteration methods again
-// map outside, to map through the categories and access transactions
-// sort inside, to sort the transactions
-
 // returns a sorted transactions array of the category
-function sortCategoryByDate(category) {
-  return category.transactions.sort((a, b) => {
+function sortTransactionsByDate(transactions) {
+  return transactions.sort((a, b) => {
     // a and b have to be dates
     if (dateFns.isDate(a.date) && dateFns.isDate(b.date)) {
       // if a is after b, returns true
@@ -127,127 +99,40 @@ function sortCategoryByDate(category) {
   });
 }
 
-// returns a number
+// returns a String
 function sumOfCategory(category) {
   const totalPrice = category.transactions.reduce(
-    (total, transaction) => total + Number(transaction.price),
+    (total, transaction) => total + transaction.price,
     0
   );
   return roundToPrice(totalPrice);
 }
 
 // helper function to round number correctly to the second decimal place
-const roundToPrice = value =>
-  Number((Math.round(value * 100) / 100).toFixed(2));
+const roundToPrice = value => (Math.round(value * 100) / 100).toFixed(2);
 
 // get a total of prices in income or expense
 function sumOfGroup(group) {
   const categories = Object.values(group);
   const sum = categories.reduce(
-    (total, category) => total + sumOfCategory(category),
+    (total, category) => total + Number(sumOfCategory(category)),
     0
   );
   return roundToPrice(sum);
 }
 
-function displayAllByCategory() {
-  const incomeCategories = Object.values(income);
-  const expenseCategories = Object.values(expense);
-
-  // find a way to DRY this
-  console.log("INCOME");
-  incomeCategories.map(category => displayCategory(category));
-  console.log("\nEXPENSE");
-  expenseCategories.map(category => displayCategory(category));
-}
-
-function createIncomeCategory() {
-  const emptyIncomeCategory = {
-    salary: {
-      name: "Salary",
-      transactions: []
-    },
-    cashBack: {
-      name: "Cash Back",
-      transactions: []
-    },
-    gifts: {
-      name: "Gifts",
-      transactions: []
-    },
-    other: {
-      name: "Other",
-      transactions: []
-    }
-  };
-  return emptyIncomeCategory;
-}
-
-function createExpenseCategory() {
-  const emptyExpenseCategory = {
-    food: {
-      name: "Food",
-      transactions: []
-    },
-    transportation: {
-      name: "Transportation",
-      transactions: []
-    },
-    trips: {
-      name: "Trips",
-      transactions: []
-    },
-    gifts: {
-      name: "Gifts",
-      transactions: []
-    },
-    health: {
-      name: "Health",
-      transactions: []
-    },
-    beauty: {
-      name: "Beauty",
-      transactions: []
-    },
-    recreationalActivities: {
-      name: "Recreational Activities",
-      transactions: []
-    },
-    shopping: {
-      name: "Shopping",
-      transactions: []
-    },
-    sports: {
-      name: "Sports",
-      transactions: []
-    },
-    pets: {
-      name: "Pets",
-      transactions: []
-    },
-    education: {
-      name: "Education",
-      transactions: []
-    },
-    entertainment: {
-      name: "Entertainment",
-      transactions: []
-    },
-    work: {
-      name: "Work",
-      transactions: []
-    },
-    other: {
-      name: "Other",
-      transactions: []
-    }
-  };
-  return emptyExpenseCategory;
+function displayEntireGroup(group) {
+  const categories = Object.values(group);
+  categories.map(category =>
+    sortTransactionsByDate(category.transactions).map(transactions =>
+      displayTransactions(transactions)
+    )
+  );
 }
 
 // calculate total gain in money
 const totalGain = (income, expense) =>
-  roundToPrice(sumOfGroup(income) - sumOfGroup(expense));
+  roundToPrice(Number(sumOfGroup(income)) - Number(sumOfGroup(expense)));
 
 // hard code income and expense for now
 const income = {
@@ -638,30 +523,16 @@ addTransaction(expense.food, {
   id: 49
 });
 
-// displayCategory(expense.food);
-
-// var mochaCoffee1 = findTransaction(expense.food.transactions, 1);
-// console.log("Mocha coffee 1:", dateFns.format(mochaCoffee1.date, "M/D/YYYY"));
-
-// var mochaCoffee2 = findTransaction(expense.food.transactions, 2);
-// console.log("Mocha coffee 2:", dateFns.format(mochaCoffee2.date, "M/D/YYYY"));
-
-// sortCategoryByDate(expense.food);
-
-// displayCategory(expense.entertainment);
-
-// var sorted = sortCategoryByDate(expense.food);
-// console.log(sorted);
-
-console.log(
-  newDisplayCategory(
-    expense,
-    dateFns.startOfMonth(new Date()),
-    dateFns.endOfMonth(new Date())
-  )
+console.log("***********************\nINCOME");
+displayGroup(
+  income,
+  dateFns.startOfMonth(new Date()),
+  dateFns.endOfMonth(new Date())
 );
-
-/*  Notes:
- *  I need to fix the price so it comes out always to the second decimal place, even with trailing zeros
- *
- */
+console.log();
+console.log("***********************\nEXPENSE");
+displayGroup(
+  expense,
+  dateFns.startOfMonth(new Date()),
+  dateFns.endOfMonth(new Date())
+);
