@@ -58,6 +58,10 @@ function displayGroup(group, startDate, endDate) {
   const groupCategories = Object.values(group);
   groupCategories.map(function(category) {
     console.log(`${category.name}:`);
+    console.log(
+      "TOTAL: $" +
+        roundToPrice(Number(sumOfCategory(category, startDate, endDate)))
+    );
     const filteredTransactions = category.transactions.filter(transaction =>
       // keep everything that isWithinRange
       dateFns.isWithinRange(transaction.date, startDate, endDate)
@@ -67,7 +71,7 @@ function displayGroup(group, startDate, endDate) {
 }
 
 function isolateGroupByRange(group, startDate, endDate) {
-  const groupCategories = Object.values(group);
+  const groupCategories = Object.values(group); // groupCategories is an array of category objects
 
   const groupWithinRange = groupCategories.map(category =>
     category.transactions.filter(transaction =>
@@ -80,7 +84,7 @@ function isolateGroupByRange(group, startDate, endDate) {
   return groupWithinRange;
 }
 
-// returns a sorted transactions array of the category
+// returns a sorted transactions array
 function sortTransactionsByDate(transactions) {
   return transactions.sort((a, b) => {
     // a and b have to be dates
@@ -109,16 +113,36 @@ function sumOfCategory(category) {
 }
 
 // helper function to round number correctly to the second decimal place
-const roundToPrice = value => (Math.round(value * 100) / 100).toFixed(2);
+// source: http://www.jacklmoore.com/notes/rounding-in-javascript/
+const roundToPrice = value =>
+  Number(Math.round(value + "e" + 2) + "e-" + 2).toFixed(2);
 
 // get a total of prices in income or expense
-function sumOfGroup(group) {
-  const categories = Object.values(group);
-  const sum = categories.reduce(
-    (total, category) => total + Number(sumOfCategory(category)),
+function sumOfGroup(group, startDate, endDate) {
+  // const arrayOfCategories = isolateGroupByRange(group); // this is an array of Arrays.. the Arrays are categories
+  // arrayOfCategories.map();
+  // map through each category Array and reduce each one
+  // then reduce the outer array
+
+  const groupCategories = Object.values(group);
+  const arrayofCategorySums = groupCategories.map(category =>
+    sumOfCategory(category, startDate, endDate)
+  );
+  const groupTotal = arrayofCategorySums.reduce(
+    (total, categorySum) => total + categorySum,
     0
   );
-  return roundToPrice(sum);
+  return roundToPrice(groupTotal);
+}
+
+function sumOfCategory(category, startDate, endDate) {
+  const filteredTransactions = category.transactions.filter(transaction =>
+    dateFns.isWithinRange(transaction.date, startDate, endDate)
+  );
+  return filteredTransactions.reduce(
+    (total, transaction) => total + transaction.price,
+    0
+  );
 }
 
 function displayEntireGroup(group) {
@@ -130,9 +154,12 @@ function displayEntireGroup(group) {
   );
 }
 
-// calculate total gain in money
-const totalGain = (income, expense) =>
-  roundToPrice(Number(sumOfGroup(income)) - Number(sumOfGroup(expense)));
+// calculate total gain in money for a time period
+const totalGain = (income, expense, startDate, endDate) =>
+  roundToPrice(
+    Number(sumOfGroup(income, startDate, endDate)) -
+      Number(sumOfGroup(expense, startDate, endDate))
+  );
 
 // hard code income and expense for now
 const income = {
@@ -140,7 +167,7 @@ const income = {
     name: "Salary",
     transactions: [
       {
-        info: "Salary",
+        info: "Paycheck 9/15",
         price: 2011.74,
         date: new Date(2018, 8, 14),
         id: 36
@@ -500,8 +527,6 @@ const expense = {
   }
 };
 
-// displayAllByCategory();
-
 addTransaction(expense.food, {
   info: "Açaí bowls with CE & CV",
   price: 9.62,
@@ -523,7 +548,25 @@ addTransaction(expense.food, {
   id: 49
 });
 
+console.log(
+  "TOTAL GAIN: $" +
+    totalGain(
+      income,
+      expense,
+      dateFns.startOfMonth(new Date()),
+      dateFns.endOfMonth(new Date())
+    )
+);
+
 console.log("***********************\nINCOME");
+console.log(
+  "TOTAL INCOME: $" +
+    sumOfGroup(
+      income,
+      dateFns.startOfMonth(new Date()),
+      dateFns.endOfMonth(new Date())
+    )
+);
 displayGroup(
   income,
   dateFns.startOfMonth(new Date()),
@@ -531,6 +574,14 @@ displayGroup(
 );
 console.log();
 console.log("***********************\nEXPENSE");
+console.log(
+  "TOTAL EXPENSE: $" +
+    sumOfGroup(
+      expense,
+      dateFns.startOfMonth(new Date()),
+      dateFns.endOfMonth(new Date())
+    )
+);
 displayGroup(
   expense,
   dateFns.startOfMonth(new Date()),
