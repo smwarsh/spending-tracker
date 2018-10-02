@@ -69,7 +69,7 @@ function displayGroup(group, startDate, endDate) {
     displayTransactions(filteredTransactions);
   });
 }
-
+/*
 function isolateGroupByRange(group, startDate, endDate) {
   const groupCategories = Object.values(group); // groupCategories is an array of category objects
 
@@ -83,7 +83,7 @@ function isolateGroupByRange(group, startDate, endDate) {
   // returns an array of Arrays (the categories are not objects anymore)
   return groupWithinRange;
 }
-
+*/
 // returns a sorted transactions array
 function sortTransactionsByDate(transactions) {
   return transactions.sort((a, b) => {
@@ -116,6 +116,31 @@ function sumOfCategory(category) {
 // source: http://www.jacklmoore.com/notes/rounding-in-javascript/
 const roundToPrice = value =>
   Number(Math.round(value + "e" + 2) + "e-" + 2).toFixed(2);
+
+function earliestDateInGroup(group) {
+  // find earliest date for income
+  const groupCategories = Object.values(group);
+  const arrayOfEarliestDates = groupCategories.map(function(category) {
+    return earliestDateInCategory(category);
+  });
+  arrayOfEarliestDates
+    .forEach
+    // do essentially the same thing as in the forEach loop of earliestDateInCategory
+    ();
+  // later, compare earliest dates for income and expense and return the earlier one
+}
+
+// adapted from https://stackoverflow.com/a/20079951
+function earliestDateInCategory(category) {
+  if (category.transactions.length < 1) return null;
+  let earliestDate = category.transactions[0].date;
+  category.transactions.forEach(function(transaction) {
+    if (dateFns.isBefore(transaction.date, earliestDate)) {
+      earliestDate = transaction.date;
+    }
+  });
+  return earliestDate;
+}
 
 // get a total of prices in income or expense
 function sumOfGroup(group, startDate, endDate) {
@@ -527,26 +552,27 @@ const expense = {
   }
 };
 
-addTransaction(expense.food, {
-  info: "Açaí bowls with CE & CV",
-  price: 9.62,
-  date: new Date(2018, 6, 29), // July 29
+addTransaction(expense.gifts, {
+  info: "International stamp",
+  price: 1.15,
+  date: new Date(2018, 9, 1), // Oct 1
   id: 47
 });
 
-addTransaction(expense.food, {
-  info: "GN's birthday dinner",
-  price: 21.99,
-  date: new Date(2018, 6, 28), // July 28
+addTransaction(expense.education, {
+  info: "Group A loan",
+  price: 500.0,
+  date: new Date(2018, 9, 1), // Oct 1
   id: 48
 });
-
+/*
 addTransaction(expense.food, {
   info: "Lemonade",
   price: 2.72,
   date: new Date(2018, 6, 9), // July 9
   id: 49
 });
+*/
 
 console.log(
   "TOTAL GAIN: $" +
