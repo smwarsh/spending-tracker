@@ -2,14 +2,14 @@
  *  Many basic structural elements of this code are taken from a code sample
  *  given to me by @cjaredm on Twitter.
  *  The code can be found on Code Sandbox at this link as of Sep 10, 2018:
- *  https://codesandbox.io/s/0x635kqjnw?expanddevtools=1&hidenavigation=1
+ *  https://codesandbox.io/s/0x635kqjnw
  **/
 
 "use strict";
 
 import * as dateFns from "date-fns";
 
-let id = 49; // start at the end of the hard-coded transactions
+let id = 50; // start at the end of the hard-coded transactions
 
 // takes 2 objects
 function addTransaction(category, data) {
@@ -117,19 +117,6 @@ function sumOfCategory(category) {
 const roundToPrice = value =>
   Number(Math.round(value + "e" + 2) + "e-" + 2).toFixed(2);
 
-function earliestDateInGroup(group) {
-  // find earliest date for income
-  const groupCategories = Object.values(group);
-  const arrayOfEarliestDates = groupCategories.map(function(category) {
-    return earliestDateInCategory(category);
-  });
-  arrayOfEarliestDates
-    .forEach
-    // do essentially the same thing as in the forEach loop of earliestDateInCategory
-    ();
-  // later, compare earliest dates for income and expense and return the earlier one
-}
-
 // adapted from https://stackoverflow.com/a/20079951
 function earliestDateInCategory(category) {
   if (category.transactions.length < 1) return null;
@@ -142,8 +129,69 @@ function earliestDateInCategory(category) {
   return earliestDate;
 }
 
+function latestDateInCategory(category) {
+  if (category.transactions.length < 1) return null;
+  let latestDate = category.transactions[0].date;
+  category.transactions.forEach(function(transaction) {
+    if (dateFns.isAfter(transaction.date, latestDate)) {
+      latestDate = transaction.date;
+    }
+  });
+  return latestDate;
+}
+
+function earliestDateInGroup(group) {
+  const groupCategories = Object.values(group);
+  const arrayOfEarliestDates = groupCategories.map(category =>
+    earliestDateInCategory(category)
+  );
+  let earliestDate = arrayOfEarliestDates.find(date => date !== null);
+  arrayOfEarliestDates.forEach(function(date) {
+    if (date) {
+      if (dateFns.isBefore(date, earliestDate)) {
+        earliestDate = date;
+      }
+    }
+  });
+  return earliestDate;
+}
+
+function latestDateInGroup(group) {
+  const groupCategories = Object.values(group);
+  const arrayOfLatestDates = groupCategories.map(category =>
+    latestDateInCategory(category)
+  );
+  let latestDate = arrayOfLatestDates.find(date => date !== null);
+  arrayOfLatestDates.forEach(function(date) {
+    if (date) {
+      if (dateFns.isAfter(date, latestDate)) {
+        latestDate = date;
+      }
+    }
+  });
+  return latestDate;
+}
+
+// uses global variables, for now
+function earliestDate() {
+  const earliestIncome = earliestDateInGroup(income);
+  const earliestExpense = earliestDateInGroup(expense);
+  return dateFns.isBefore(earliestIncome, earliestExpense)
+    ? earliestIncome
+    : earliestExpense;
+}
+
+// uses global variables, for now
+function latestDate() {
+  const latestIncome = latestDateInGroup(income);
+  const latestExpense = latestDateInGroup(expense);
+  return dateFns.isAfter(latestIncome, latestExpense)
+    ? latestIncome
+    : latestExpense;
+}
+
 // get a total of prices in income or expense
-function sumOfGroup(group, startDate, endDate) {
+function sumOfGroup(group, startDate = earliestDate(), endDate = latestDate()) {
   // const arrayOfCategories = isolateGroupByRange(group); // this is an array of Arrays.. the Arrays are categories
   // arrayOfCategories.map();
   // map through each category Array and reduce each one
@@ -160,7 +208,11 @@ function sumOfGroup(group, startDate, endDate) {
   return roundToPrice(groupTotal);
 }
 
-function sumOfCategory(category, startDate, endDate) {
+function sumOfCategory(
+  category,
+  startDate = earliestDate(),
+  endDate = latestDate()
+) {
   const filteredTransactions = category.transactions.filter(transaction =>
     dateFns.isWithinRange(transaction.date, startDate, endDate)
   );
@@ -180,7 +232,12 @@ function displayEntireGroup(group) {
 }
 
 // calculate total gain in money for a time period
-const totalGain = (income, expense, startDate, endDate) =>
+const totalGain = (
+  income,
+  expense,
+  startDate = earliestDate(),
+  endDate = latestDate()
+) =>
   roundToPrice(
     Number(sumOfGroup(income, startDate, endDate)) -
       Number(sumOfGroup(expense, startDate, endDate))
@@ -201,7 +258,14 @@ const income = {
   },
   cashBack: {
     name: "Cash Back",
-    transactions: []
+    transactions: [
+      {
+        info: "Paycheck 9/30",
+        price: 2011.75,
+        date: new Date(2018, 8, 28),
+        id: 51
+      }
+    ]
   },
   gifts: {
     name: "Gifts",
@@ -220,7 +284,7 @@ const expense = {
       {
         info: "Mocha coffee",
         price: 4.42,
-        date: new Date(2018, 8, 12),
+        date: new Date(2018, 8, 14),
         id: 1
       },
       {
@@ -565,14 +629,20 @@ addTransaction(expense.education, {
   date: new Date(2018, 9, 1), // Oct 1
   id: 48
 });
-/*
-addTransaction(expense.food, {
-  info: "Lemonade",
-  price: 2.72,
-  date: new Date(2018, 6, 9), // July 9
+
+addTransaction(expense.transportation, {
+  info: "Parking garage",
+  price: 3.0,
+  date: new Date(2018, 7, 1),
   id: 49
 });
-*/
+
+addTransaction(income.other, {
+  info: "Reimbursement",
+  price: 40.0,
+  date: new Date(2018, 6, 1), // July 1
+  id: 50
+});
 
 console.log(
   "TOTAL GAIN: $" +
