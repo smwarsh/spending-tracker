@@ -9,6 +9,6 @@ h1 {
   font-style: italic;
 }
 
-div {
-  padding: 10px 0px;
+table {
+	width: 100%;
 }

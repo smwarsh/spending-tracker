@@ -7,7 +7,8 @@
 
 "use strict";
 
-import * as dateFns from "date-fns";
+import dateFns from "date-fns";
+// import dateFns from '../node_modules/date-fns';
 
 let id = 50; // start at the end of the hard-coded transactions
 
@@ -103,14 +104,15 @@ function sortTransactionsByDate(transactions) {
   });
 }
 
+// CANT OVERLOAD A FUNCTION!
 // returns a String
-function sumOfCategory(category) {
-  const totalPrice = category.transactions.reduce(
-    (total, transaction) => total + transaction.price,
-    0
-  );
-  return roundToPrice(totalPrice);
-}
+// function sumOfCategory(category) {
+//   const totalPrice = category.transactions.reduce(
+//     (total, transaction) => total + transaction.price,
+//     0
+//   );
+//   return roundToPrice(totalPrice);
+// }
 
 // helper function to round number correctly to the second decimal place
 // source: http://www.jacklmoore.com/notes/rounding-in-javascript/
