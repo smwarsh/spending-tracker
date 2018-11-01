@@ -12,7 +12,8 @@
 	$queryIncomeOther = "SELECT * FROM `income_other`";
 	$resultIncomeOther = $mysqli->query($queryIncomeOther) or die($mysqli->error.__LINE__);
 
-	$queryExpenseFood = "SELECT * FROM `expense_food`";
+	$queryExpenseFood = "SELECT * FROM `expense_food`
+						ORDER BY date";
 	$resultExpenseFood = $mysqli->query($queryExpenseFood) or die($mysqli->error.__LINE__);
 
 	$queryExpenseTransportation = "SELECT * FROM `expense_transportation`";
@@ -20,6 +21,39 @@
 
 	$queryExpenseTrips = "SELECT * FROM `expense_trips`";
 	$resultExpenseTrips = $mysqli->query($queryExpenseTrips) or die($mysqli->error.__LINE__);
+
+	$queryExpenseGifts = "SELECT * FROM `expense_gifts`";
+	$resultExpenseGifts = $mysqli->query($queryExpenseGifts) or die($mysqli->error.__LINE__);
+
+	$queryExpenseHealth = "SELECT * FROM `expense_health`";
+	$resultExpenseHealth = $mysqli->query($queryExpenseHealth) or die($mysqli->error.__LINE__);
+
+	$queryExpenseBeauty = "SELECT * FROM `expense_beauty`";
+	$resultExpenseBeauty = $mysqli->query($queryExpenseBeauty) or die($mysqli->error.__LINE__);
+
+	$queryExpenseRecreationalActivities = "SELECT * FROM `expense_recreational_activities`";
+	$resultExpenseRecreationalActivities = $mysqli->query($queryExpenseRecreationalActivities) or die($mysqli->error.__LINE__);
+
+	$queryExpenseShopping = "SELECT * FROM `expense_shopping`";
+	$resultExpenseShopping = $mysqli->query($queryExpenseShopping) or die($mysqli->error.__LINE__);
+
+	$queryExpenseSports = "SELECT * FROM `expense_sports`";
+	$resultExpenseSports = $mysqli->query($queryExpenseSports) or die($mysqli->error.__LINE__);
+
+	$queryExpensePets = "SELECT * FROM `expense_pets`";
+	$resultExpensePets = $mysqli->query($queryExpensePets) or die($mysqli->error.__LINE__);
+
+	$queryExpenseEducation = "SELECT * FROM `expense_education`";
+	$resultExpenseEducation = $mysqli->query($queryExpenseEducation) or die($mysqli->error.__LINE__);
+
+	$queryExpenseEntertainment = "SELECT * FROM `expense_entertainment`";
+	$resultExpenseEntertainment = $mysqli->query($queryExpenseEntertainment) or die($mysqli->error.__LINE__);
+
+	$queryExpenseWork = "SELECT * FROM `expense_work`";
+	$resultExpenseWork = $mysqli->query($queryExpenseWork) or die($mysqli->error.__LINE__);
+
+	$queryExpenseOther = "SELECT * FROM `expense_other`";
+	$resultExpenseOther = $mysqli->query($queryExpenseOther) or die($mysqli->error.__LINE__);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,24 +65,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- import the webpage's stylesheet -->
-	<link rel="stylesheet" href="../style.css">
+	<link rel="stylesheet" href="../../css/styles.css">
 
 </head>
 
 <body>
+	<div class="container">
 	<h1>Thrift</h1>
 
 	<p>I am writing a spending tracker app. I am currently setting up the MVP.</p>
-
-	<p>I have just connected the site to the database and I am in the process of changing the static content below into database information.</p>
 
 	<h2>Income</h2>
 	<div>
 		<h3>Salary</h3>
 		<?php
 			if($resultIncomeSalary->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -77,8 +110,8 @@
 		<h3>Cash Back</h3>
 		<?php
 			if($resultIncomeCashBack->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -107,8 +140,8 @@
 		<h3>Gifts</h3>
 		<?php
 			if($resultIncomeGifts->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -137,8 +170,8 @@
 		<h3>Other</h3>
 		<?php
 			if($resultIncomeOther->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -169,8 +202,8 @@
 		<h3>Food</h3>
 		<?php
 			if($resultExpenseFood->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -199,8 +232,8 @@
 		<h3>Transportation</h3>
 		<?php
 			if($resultExpenseTransportation->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -229,8 +262,8 @@
 		<h3>Trips</h3>
 		<?php
 			if($resultExpenseTrips->num_rows > 0) {
-				$header = '<table>';
-				$header .= '<tr>';
+				echo '<table>';				
+				$header = '<tr>';
 				$header .= '<th>Info</th>';
 				$header .= '<th>Price</th>';
 				$header .= '<th>Date</th>';
@@ -257,204 +290,337 @@
 
 	<div>
 		<h3>Gifts</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Gifts--Info</td>
-				<td>--Gifts--Price</td>
-				<td>--Gifts--Date</td>
-				<td>--Gifts--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseGifts->num_rows > 0) {
+				echo '<table>';				
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseGifts->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Health</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Health--Info</td>
-				<td>--Health--Price</td>
-				<td>--Health--Date</td>
-				<td>--Health--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseHealth->num_rows > 0) {
+				echo '<table>';				
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseHealth->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Beauty</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Beauty--Info</td>
-				<td>--Beauty--Price</td>
-				<td>--Beauty--Date</td>
-				<td>--Beauty--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseBeauty->num_rows > 0) {
+				echo '<table>';				
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseBeauty->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Recreational Activities</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--RecreationalActivities--Info</td>
-				<td>--RecreationalActivities--Price</td>
-				<td>--RecreationalActivities--Date</td>
-				<td>--RecreationalActivities--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseRecreationalActivities->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseRecreationalActivities->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Shopping</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Shopping--Info</td>
-				<td>--Shopping--Price</td>
-				<td>--Shopping--Date</td>
-				<td>--Shopping--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseShopping->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseShopping->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Sports</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Sports--Info</td>
-				<td>--Sports--Price</td>
-				<td>--Sports--Date</td>
-				<td>--Sports--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseSports->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseSports->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Pets</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Pets--Info</td>
-				<td>--Pets--Price</td>
-				<td>--Pets--Date</td>
-				<td>--Pets--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpensePets->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpensePets->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Education</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Education--Info</td>
-				<td>--Education--Price</td>
-				<td>--Education--Date</td>
-				<td>--Education--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseEducation->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseEducation->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Entertainment</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Entertainment--Info</td>
-				<td>--Entertainment--Price</td>
-				<td>--Entertainment--Date</td>
-				<td>--Entertainment--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseEntertainment->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseEntertainment->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Work</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Work--Info</td>
-				<td>--Work--Price</td>
-				<td>--Work--Date</td>
-				<td>--Work--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseWork->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseWork->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<div>
 		<h3>Other</h3>
-		<table>
-			<tr>
-				<th>Info</th>
-				<th>Price</th>
-				<th>Date</th>
-				<th>Notes</th>
-			</tr>
-			<tr>
-				<td>--Other--Info</td>
-				<td>--Other--Price</td>
-				<td>--Other--Date</td>
-				<td>--Other--Notes</td>
-			</tr>
-		</table>
+		<?php
+			if($resultExpenseOther->num_rows > 0) {
+				echo '<table>';
+				$header = '<tr>';
+				$header .= '<th>Info</th>';
+				$header .= '<th>Price</th>';
+				$header .= '<th>Date</th>';
+				$header .= '<th>Notes</th>';
+				$header .= '</tr>';
+				echo $header;
+
+				while($row = $resultExpenseOther->fetch_assoc()) {
+					$output = '<tr>';
+					$output .= '<td>'.stripslashes($row['item']).'</td>';
+					$output .= '<td>'.stripslashes($row['price']).'</td>';
+					$output .= '<td>'.stripslashes($row['date']).'</td>';
+					$output .= '<td>'.stripslashes($row['note']).'</td>';
+					$output .= '</tr>';
+					echo $output;
+				}
+
+				echo '</table>';
+			} else {
+				echo '<p>There are no transactions in this category</p>';
+			}
+		?>
 	</div>
 
 	<!-- import the webpage's javascript file -->
 	<script src="main.js" defer></script>
+	</div>
 </body>
 
 </html>
