@@ -260,14 +260,7 @@ const income = {
   },
   cashBack: {
     name: "Cash Back",
-    transactions: [
-      {
-        info: "Paycheck 9/30",
-        price: 2011.75,
-        date: new Date(2018, 8, 28),
-        id: 51
-      }
-    ]
+    transactions: []
   },
   gifts: {
     name: "Gifts",
